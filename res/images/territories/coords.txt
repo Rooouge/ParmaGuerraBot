@@ -1,0 +1,56 @@
+Albareto	:	431  1903
+Bardi		:	269  1281
+Bedonia		:	116  1546
+Berceto		:	1053 1572
+Bore		:	761  1015
+Borgotaro	:	610  1712
+Busseto		:	1287 127
+Calestano	:	1422 1434
+Cittadella	:	2075 886
+Collecchio	:	1604 857
+Colorno		:	2071 215
+Compiano	:	476  1638
+Corniglio	:	1247 1692
+Cortile sm	:	2043 588
+Felino		:	1737 1149
+Fidenza		:	1278 380
+Fontanellato	:	1555 437
+Fontevivo	:	1690 618
+Fornovo		:	1367 1190
+Golese		:	1858 522
+Langhirano	:	1709 1264
+Lesignano	:	1879 1339
+Lubiana		:	2116 891
+Medesano	:	1277 939
+Molinetto	:	1926 880
+Monchio		:	1443 2116
+Montanara	:	2035 907
+Montechiarugolo	:	2094 1067
+Neviano		:	1855 1578
+Noceto		:	1407 683
+Oltretorrente	:	2058 839
+Pablo		:	2019 815
+Palanzano	:	1635 1982
+Parma Centro	:	2075 837
+Pellegrino	:	927  854
+Polesine	:	1412 4
+Roccabianca	:	1712 43
+Sala Baganza	:	1704 1108
+Salsomaggiore	:	1086 695
+San Lazzaro	:	2124 763
+San Leonardo	:	2066 793
+San Pancrazio	:	1824 779
+San Secondo	:	1687 277
+Sissa		:	1857 145
+Solignano	:	1056 1274
+Soragna		:	1494 217
+Sorbolo		:	2222 308
+Terenzo		:	1268 1407
+Tizzano		:	1614 1724
+Tornolo		:	4    1980
+Torrile		:	2001 352
+Traversetolo	:	2072 1291
+Valmozzola	:	854  1505
+Varano		:	1029 1139
+Varsi		:	713  1262
+Vigatto		:	1890 961
