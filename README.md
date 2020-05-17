@@ -15,6 +15,11 @@ La parte di codice Java prevede solo ciò che serve per far funzionare il bot. E
 
 - NON prevede ciò che serve per postare su Facebook
 
+
+Aggiungo inoltre che prima di pubblicarlo ho fatto un po' di pulizia per renderlo un minimo presentabile, può essere che qualche dettaglio mi sia sfuggito.
+
+
 Per qualsiasi informazione aggiuntiva potete conttattarmi sulle pagine Facebook e Instagram di Parma.Guerra.Bot, oppure via mail:
 - parmaguerrabot@gmail.com
 - andrea.rossi14@studenti.unipr.it
+----------------------------------------------------------------------------------------------------------------------------------------
