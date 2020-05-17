@@ -1,6 +1,7 @@
 package parmaguerrabot.map;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class Territory implements Comparable<Territory>, Serializable {
 	public int owner;
 	
 	public Color color;
-	public Coordinates coordinates;
+	public Point coordinates;
 	
 	private List<Integer> neighbors;
 	
@@ -41,7 +42,7 @@ public class Territory implements Comparable<Territory>, Serializable {
 	public String insurrectionLoser;
 	
 	
-	public Territory(Map map, int id, String name, Coordinates coordinates, String prefix) {
+	public Territory(Map map, int id, String name, Point coordinates, String prefix) {
 		this.map = map;
 		this.id = id;
 		this.name = name;
@@ -161,8 +162,6 @@ public class Territory implements Comparable<Territory>, Serializable {
 		this.insurrection = true;		
 		this.insurrectionDate = map.date;
 		this.insurrectionLoser = loserOwner.name;
-		
-		System.out.println(loserOwner.name + " " + loserOwner.id);
 	}
 	
 	public void removeFromControl(int id) {
