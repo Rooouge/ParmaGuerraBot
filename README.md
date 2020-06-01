@@ -23,4 +23,8 @@ Aggiungo inoltre che prima di pubblicarlo ho fatto un po' di pulizia per renderl
 Per qualsiasi informazione aggiuntiva potete conttattarmi sulle pagine Facebook e Instagram di Parma.Guerra.Bot, oppure via mail:
 - parmaguerrabot@gmail.com
 - andrea.rossi14@studenti.unipr.it
+
 ----------------------------------------------------------------------------------------------------------------------------------------
+
+External Jars:
+- GSON Library from Google
