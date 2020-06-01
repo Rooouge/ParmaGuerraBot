@@ -5,6 +5,8 @@ import java.io.IOException;
 public class ParmaGuerraBot {
 
 	public static void main(String[] args) {
+		Core.setFileSaveSystem(Core.JSON);
+		
 		try {
 			if(args.length == 1) {
 				switch (args[0]) {
@@ -46,8 +48,11 @@ public class ParmaGuerraBot {
 	private static void bot() throws IOException {
 		if(!Core.isInitialized())
 			Core.init();
-		else
-			Core.run();
+		else {
+			if(Core.run())
+				System.exit(2);
+			System.exit(0);
+		}
 	}
 	
 	/**

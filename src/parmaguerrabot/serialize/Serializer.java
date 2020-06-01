@@ -9,9 +9,9 @@ import java.io.ObjectOutputStream;
 
 import parmaguerrabot.map.Map;
 
-public class MapSerializer {
+public class Serializer {
 
-	private MapSerializer() {}
+	private Serializer() {}
 	
 	public static void serializeMap(Map map, String fileName) throws IOException {
 		File mapFile = new File(fileName);
@@ -21,11 +21,9 @@ public class MapSerializer {
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 		) {
 			oos.writeObject(map);
-		} catch(IOException e) {
-			e.printStackTrace();
-			System.exit(1);
 		}
 	}
+	
 	
 	public static Map deserializeMap(String fileName) throws IOException {
 		File file = new File(fileName);
@@ -39,14 +37,15 @@ public class MapSerializer {
 			ObjectInputStream ois = new ObjectInputStream(fis);
 		) {
 			map = (Map)ois.readObject();
-		} catch(Exception e) {
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			System.exit(1);
-		} 
+			throw new IOException("Failed to deserialize " + file.getName());
+		}
 		
 		if(map != null) 
 			return map;
 		
 		throw new IOException("map null");
 	}
+	
 }

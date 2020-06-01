@@ -55,7 +55,7 @@ public class ImagesGenerator {
 		if(firstRound) {
 			Logger.mapLog("");
 			
-			String log = Map.DATE_FORMAT.format(map.date) + " - La guerra ha inizio! " + Utils.getHashtags();
+			String log = Utils.DATE_FORMAT.format(map.date) + " - La guerra ha inizio! " + Utils.getHashtags();
 			
 			Utils.writeDescription(log);
 		}
@@ -149,7 +149,7 @@ public class ImagesGenerator {
 		
 		g.setColor(generic);
 		g.setFont(new Font("SansSerif", Font.BOLD, 50));
-		g.drawString("   " + Map.DATE_FORMAT.format(map.date), 100, 100);
+		g.drawString("   " + Utils.DATE_FORMAT.format(map.date), 100, 100);
 		g.drawString("--------------------", 100, 150);
 		
 		for(int i = 0; i < 8 && i < scores.size(); i++) {

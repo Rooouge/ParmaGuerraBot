@@ -3,12 +3,15 @@ package parmaguerrabot.map;
 import java.awt.Color;
 import java.awt.Point;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import parmaguerrabot.Utils;
 import parmaguerrabot.log.Logger;
+import parmaguerrabot.serialize.json.JSONObject;
 
 @SuppressWarnings("serial")
 public class Territory implements Comparable<Territory>, Serializable {
@@ -16,19 +19,18 @@ public class Territory implements Comparable<Territory>, Serializable {
 	public static final String PREFIX_COMUNE = "Il comune di ";
 	public static final String PREFIX_QUARTIERE = "Quartiere ";
 	
+	private transient Map map;
 	
-	private final Map map;
-	
-	public final int id;
-	public final String name;
+	public int id;
+	public String name;
 	public int owner;
 	
 	public Color color;
 	public Point coordinates;
 	
-	private List<Integer> neighbors;
+	public List<Integer> neighbors;
 	
-	private List<Integer> underControl;
+	public List<Integer> underControl;
 	
 	public int timesAttackStat;
 	public int timesLostStat;
@@ -37,10 +39,16 @@ public class Territory implements Comparable<Territory>, Serializable {
 	
 	public String prefix;
 	
-	private boolean insurrection;
+	public boolean insurrection;
 	public Date insurrectionDate;
 	public String insurrectionLoser;
 	
+//	public String jsonToWrite;
+	
+	
+	public Territory() {
+		
+	}
 	
 	public Territory(Map map, int id, String name, Point coordinates, String prefix) {
 		this.map = map;
@@ -50,6 +58,8 @@ public class Territory implements Comparable<Territory>, Serializable {
 		this.coordinates = coordinates;
 		
 		this.prefix = prefix;
+		
+//		this.jsonToWrite = Utils.GAME_DIRECTORY + "/" + this.name + ".json";
 		
 		init();
 	}
@@ -122,7 +132,7 @@ public class Territory implements Comparable<Territory>, Serializable {
 		return enemy;
 	}
 	
-	public void addUnderControl(Territory loser, Territory loserOwner, List<Integer> alive, List<Integer> dead) {
+	public void attack(Territory loser, Territory loserOwner, List<Integer> alive, List<Integer> dead) {
 		underControl.add(Integer.valueOf(loser.id));
 		if(this.underControl.size() > this.maxTerritoriesUnderControlStat)
 			this.maxTerritoriesUnderControlStat = this.underControl.size();
@@ -198,6 +208,7 @@ public class Territory implements Comparable<Territory>, Serializable {
 		return underControl.size();
 	}
 	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Territory) {
@@ -205,4 +216,27 @@ public class Territory implements Comparable<Territory>, Serializable {
 		}
 		return false;
 	}
+	
+	
+	public JSONObject getJSONObject() throws IllegalAccessException {
+		JSONObject json = new JSONObject();
+		
+		for(Field f : this.getClass().getFields()) {
+			int modifiers = f.getModifiers();
+			
+			if(!Modifier.isStatic(modifiers)) {
+				if(f.getType().isAssignableFrom(Date.class) && f.get(this) != null) {
+					String date = Utils.DATE_FORMAT.format((Date) f.get(this));
+					json.put(f.getName(), date);
+				}
+				else if(f.getType().isAssignableFrom(Color.class)) 
+					json.put(f.getName(), this.color.getRGB());
+				else
+					json.put(f.getName(), f.get(this));
+			}
+		}
+		
+		return json;
+	}
+	
 }

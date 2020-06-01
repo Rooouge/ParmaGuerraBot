@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import parmaguerrabot.Utils;
@@ -11,7 +12,7 @@ import parmaguerrabot.map.Map;
 import parmaguerrabot.map.Territory;
 
 public class Logger {
-
+	
 	public static final File LOG_DIRECTORY = new File("log");
 	public static final File MAP_LOG_FILE = new File(LOG_DIRECTORY.getPath() + "/map.log");
 	public static final File GENERIC_LOG_FILE = new File(LOG_DIRECTORY.getPath() + "/generic.log");
@@ -98,7 +99,7 @@ public class Logger {
 	 * @throws IOException
 	 */
 	public static void writeAttackLog(Map map, List<Integer> alive, Territory loser, Territory winnerOwner, Territory loserOwner, boolean insurrection) {
-		String log = Map.DATE_FORMAT.format(map.date) + " - ";
+		String log = new SimpleDateFormat("dd/MM/yyyy").format(map.date) + " - ";
 		
 		if(insurrection) {
 			log += winnerOwner.name 

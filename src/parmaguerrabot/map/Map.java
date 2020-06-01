@@ -3,7 +3,8 @@ package parmaguerrabot.map;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -14,33 +15,32 @@ import parmaguerrabot.GameConstants;
 import parmaguerrabot.Utils;
 import parmaguerrabot.images.ImagesGenerator;
 import parmaguerrabot.log.Logger;
-import parmaguerrabot.serialize.MapSerializer;
+import parmaguerrabot.serialize.Serializer;
+import parmaguerrabot.serialize.json.JSONObject;
 
 
 @SuppressWarnings("serial")
 public class Map implements Serializable {
 
-	public static final String FILE_TO_SERIALIZE = "game/map.sav";
-	public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+	public static final String SERIALIZATION_FILE = Utils.GAME_DIRECTORY.getPath() + "/map.sav";
+	public static final String JSON_FILE = Utils.GAME_DIRECTORY.getPath() + "/map.json";
 	
-	public List<Territory> territories;
+	public transient List<Territory> territories;
 	
 	public Date date;
 	
 	public Territory tWinner;
 	public int insurrections;
-	private int dayFromLastInsurrection;
+	public int dayFromLastInsurrection;
 	
 	
 	public Map() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, 2020);
-		cal.set(Calendar.MONTH, 0);
+		cal.set(Calendar.MONTH, Calendar.JANUARY);
 		cal.set(Calendar.DATE, 1);
 		
-		date = cal.getTime();		
-		
-		territories = new ArrayList<>();
+		date = cal.getTime();
 		
 		insurrections = 0;
 		dayFromLastInsurrection = 0;
@@ -51,7 +51,17 @@ public class Map implements Serializable {
 	 * 
 	 * @throws IOException
 	 */
-	public void init() throws IOException {
+	public void init() throws IOException {		
+		addTerritories();
+		
+		ImagesGenerator.generateMapImage(this, true, territories.size(), 0);
+		
+		checkColors();
+	}
+	
+	public void addTerritories() {
+		territories = new ArrayList<>();
+		
 		territories.add(new Territory(this, 0, "Polesine Zibello", new Point(1412,4), Territory.PREFIX_COMUNE));
 		territories.add(new Territory(this, 1, "Roccabianca", new Point(1712,43), Territory.PREFIX_COMUNE));
 		territories.add(new Territory(this, 2, "Sissa Trecasali", new Point(1857,145), Territory.PREFIX_COMUNE));
@@ -170,10 +180,6 @@ public class Map implements Serializable {
 		territories.get(53).addNeighbors(new int[] {54,55});
 		territories.get(54).addNeighbors(new int[] {55});
 		territories.get(55).addNeighbors(new int[] {});
-		
-		ImagesGenerator.generateMapImage(this, true, territories.size(), 0);
-		
-		checkColors();
 	}
 	
 	/**
@@ -221,7 +227,7 @@ public class Map implements Serializable {
 		if(alive.size() == 1) {
 			tWinner = territories.get(alive.get(0));
 			
-			MapSerializer.serializeMap(this, Map.FILE_TO_SERIALIZE);
+			Serializer.serializeMap(this, Map.SERIALIZATION_FILE);
 			
 			return true;
 		}
@@ -280,7 +286,7 @@ public class Map implements Serializable {
 		Territory winnerOwner = territories.get(winner.owner);
 		Territory loserOwner = territories.get(loser.owner);
 
-		winnerOwner.addUnderControl(loser, loserOwner, alive, dead);
+		winnerOwner.attack(loser, loserOwner, alive, dead);
 		
 		ImagesGenerator.generateAttackImage(this, winner, loser, winnerOwner, loserOwner);
 		Logger.writeAttackLog(this, alive, loser, winnerOwner, loserOwner, false);
@@ -322,6 +328,28 @@ public class Map implements Serializable {
 		
 		throw new ArrayIndexOutOfBoundsException("Didn't found territory with name: " + name);
 	}	
-
 	
+	
+	public JSONObject getJSONObject() throws IllegalAccessException {
+		JSONObject json = new JSONObject();
+		
+		for(Field f : this.getClass().getFields()) {
+			int modifiers = f.getModifiers();
+			
+			if(!Modifier.isStatic(modifiers) && !f.getType().isAssignableFrom(List.class)) {
+				if(f.getType().isAssignableFrom(Territory.class) && f.get(this) != null) 
+					json.put(f.getName(), ((Territory) f.get(this)).getJSONObject());
+				else {
+					if(f.getType().isAssignableFrom(Date.class)) {
+						String date = Utils.DATE_FORMAT.format((Date) f.get(this));
+						json.put(f.getName(), date);
+					}
+					else
+						json.put(f.getName(), f.get(this));
+				}
+			}
+		}
+		
+		return json;
+	}
 }

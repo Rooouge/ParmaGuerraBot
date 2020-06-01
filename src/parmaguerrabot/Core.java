@@ -8,10 +8,24 @@ import java.nio.file.Files;
 
 import parmaguerrabot.log.Logger;
 import parmaguerrabot.map.Map;
-import parmaguerrabot.serialize.MapSerializer;
+import parmaguerrabot.serialize.Serializer;
+import parmaguerrabot.serialize.json.JSONConverter;
 
 public class Core {
 
+	public static final int SERIALIZATION = 0;
+	public static final int JSON = 1;
+	
+	/**
+	 * Specifies if map & territories info have to be saved in json files or in map.sav (default = json)
+	 */
+	private static int fileSaveSystem = 1;
+	
+	
+	public static void setFileSaveSystem(int type) {
+		Core.fileSaveSystem = type;
+	}
+	
 	public static void init() throws IOException {
 		Logger.init(true);
 		Utils.init(true);
@@ -21,7 +35,17 @@ public class Core {
 		map.init();
 		Logger.genericLog("Succesfully initialized Map class");
 		
-		MapSerializer.serializeMap(map, Map.FILE_TO_SERIALIZE);
+		switch (Core.fileSaveSystem) {
+		case Core.SERIALIZATION:
+			Serializer.serializeMap(map, Map.SERIALIZATION_FILE);
+			break;
+		case Core.JSON:
+			JSONConverter.writeJSONFiles(map);
+			break;
+		default:
+			throw new IOException("Invalid file saving system: " + Core.fileSaveSystem);
+		}
+		
 	}
 
 	public static boolean run() throws IOException {
@@ -29,11 +53,31 @@ public class Core {
 		Utils.init(false);
 		Logger.genericLog("Succesfully initialized Utils class");
 		
-		Map map = MapSerializer.deserializeMap(Map.FILE_TO_SERIALIZE);
+		Map map = null;
+		
+		switch (Core.fileSaveSystem) {
+		case Core.SERIALIZATION:
+			map = Serializer.deserializeMap(Map.SERIALIZATION_FILE);
+			break;
+		case Core.JSON:
+			map = JSONConverter.readMapJSON();
+			break;
+		default:
+			throw new IOException("Invalid file saving system: " + Core.fileSaveSystem);
+		}
 		
 		boolean gameOver = map.run();
 
-		MapSerializer.serializeMap(map, Map.FILE_TO_SERIALIZE);
+		switch (Core.fileSaveSystem) {
+		case Core.SERIALIZATION:
+			Serializer.serializeMap(map, Map.SERIALIZATION_FILE);
+			break;
+		case Core.JSON:
+			JSONConverter.writeJSONFiles(map);
+			break;
+		default:
+			throw new IOException("Invalid file saving system: " + Core.fileSaveSystem);
+		}
 		
 		return gameOver;
 	}
@@ -79,5 +123,9 @@ public class Core {
 			Files.delete(file.toPath());
 		}
 	}
+	
+	
+	
+	private Core() {}
 
 }

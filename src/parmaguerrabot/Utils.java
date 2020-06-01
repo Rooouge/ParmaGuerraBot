@@ -19,6 +19,8 @@ import parmaguerrabot.log.Logger;
 
 public class Utils {
 
+	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
 	public static final String GAME_TIMESTAMP = getTimestamp();
 	
 	public static final File INITIALIZED_FILE = new File("res/files/initialized.txt");
@@ -42,17 +44,20 @@ public class Utils {
 	 * @throws IOException
 	 */
 	public static void init(boolean toInit) throws IOException {
-		if(toInit) {		
-			if(!MAPS_DIRECTORY.exists())
-				MAPS_DIRECTORY.mkdirs();
-			if(!ATTACKS_DIRECTORY.exists())
-				ATTACKS_DIRECTORY.mkdirs();
+		if(toInit) {
+			if(!GAME_DIRECTORY.exists() && !GAME_DIRECTORY.mkdirs())
+				throw new IOException("Error creating " + GAME_DIRECTORY.getName());
+			if(!MAPS_DIRECTORY.exists() && !MAPS_DIRECTORY.mkdirs())
+				throw new IOException("Error creating " + MAPS_DIRECTORY.getName());
+			if(!ATTACKS_DIRECTORY.exists() && !ATTACKS_DIRECTORY.mkdirs())
+				throw new IOException("Error creating " + ATTACKS_DIRECTORY.getName());
+			
 			if(!DESCRIPTION_FILE.exists() && !DESCRIPTION_FILE.createNewFile())
 					throw new IOException("Error creating " + DESCRIPTION_FILE.getName());
 			if(!HASHTAGS_FILE.exists() && !HASHTAGS_FILE.createNewFile())
 					throw new IOException("Error creating " + HASHTAGS_FILE.getName());
 			
-			Logger.genericLog("Game directory: " + MAPS_DIRECTORY.getAbsolutePath());
+			Logger.genericLog("Game directory: " + GAME_DIRECTORY.getAbsolutePath());
 		}
 		
 		random = new Random();
@@ -99,6 +104,8 @@ public class Utils {
 	}
 	
 	public static Color getRandomColor() {
+		if(colors == null)
+			return Color.black;
 		return colors.remove(Utils.randomInt(colors.size()));
 	}
 	
