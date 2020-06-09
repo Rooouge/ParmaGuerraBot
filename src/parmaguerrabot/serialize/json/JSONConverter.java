@@ -21,25 +21,7 @@ public class JSONConverter {
 	private JSONConverter() { }
 	
 	
-	public static void writeJSONFiles(Map map) throws IOException {
-//		try (
-//			FileWriter writer = new FileWriter(Map.JSON_FILE)
-//		) {
-//			writer.write(gson.toJson(map.getJSONObject()));
-//		} catch (IllegalAccessException e) {
-//			throw new IOException(e.fillInStackTrace());
-//		}
-//		
-//		for(Territory t : map.territories) {
-//			try (
-//				FileWriter writer = new FileWriter(t.jsonToWrite)
-//			) {
-//				writer.write(gson.toJson(t.getJSONObject()).replace("map", t.name));
-//			} catch (IllegalAccessException e) {
-//				throw new IOException(e.fillInStackTrace());
-//			}
-//		}
-		
+	public static void writeJSONFiles(Map map) throws IOException {		
 		try (
 			FileWriter writer = new FileWriter(Map.JSON_FILE)
 		) {
@@ -68,27 +50,6 @@ public class JSONConverter {
 	public static Map readMapJSON() throws IOException {
 		Map map = new Map();
 		map.addTerritories();
-		
-//		List<File> fileList = new ArrayList<>(Arrays.asList(Utils.GAME_DIRECTORY.listFiles()));
-//		fileList.remove(new File(Map.JSON_FILE));
-//		
-//		for(Territory t : map.territories) {
-//			try (
-//				FileReader reader = new FileReader(t.jsonToWrite)
-//			) {
-//				JSONObject tJSON = gson.fromJson(reader, JSONObject.class);
-//				
-//				tJSON.parseJSONObject(t);
-//			}
-//		}
-//		
-//		try (
-//			FileReader reader = new FileReader(Map.JSON_FILE)
-//		) {
-//			JSONObject mapJSON = gson.fromJson(reader, JSONObject.class);
-//			
-//			mapJSON.parseJSONObject(map);
-//		}
 		
 		String json = new String(Files.readAllBytes(Paths.get(Map.JSON_FILE)));
 		

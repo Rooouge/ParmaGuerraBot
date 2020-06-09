@@ -2,6 +2,8 @@ package parmaguerrabot;
 
 public class GameConstants {
 
+	public static final int NUMBER_OF_TERRITORIES = 56;
+	
 	/**
 	 * % chance to get an insurrection
 	 */

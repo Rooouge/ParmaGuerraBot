@@ -61,12 +61,14 @@ public class Logger {
 	 * @param log
 	 */
 	public static void mapLog(String log) {
-		try (
-			BufferedWriter writer = new BufferedWriter(new FileWriter(MAP_LOG_FILE, true));
-		) {
-			writer.write(Utils.getFormattedMessage(log));
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(MAP_LOG_FILE.exists()) {
+			try (
+				BufferedWriter writer = new BufferedWriter(new FileWriter(MAP_LOG_FILE, true));
+			) {
+				writer.write(Utils.getFormattedMessage(log));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

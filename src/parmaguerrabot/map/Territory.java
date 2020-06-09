@@ -21,45 +21,38 @@ public class Territory implements Comparable<Territory>, Serializable {
 	
 	private transient Map map;
 	
+	/*
+	 * Basic fields
+	 */
 	public int id;
 	public String name;
+	public String prefix;
 	public int owner;
-	
 	public Color color;
 	public Point coordinates;
-	
 	public List<Integer> neighbors;
-	
 	public List<Integer> underControl;
-	
-	public int timesAttackStat;
-	public int timesLostStat;
-	public Date deathTimeStat;
-	public int maxTerritoriesUnderControlStat;
-	
-	public String prefix;
-	
 	public boolean insurrection;
 	public Date insurrectionDate;
 	public String insurrectionLoser;
 	
-//	public String jsonToWrite;
+	/*
+	 * Stats fields
+	 */
+	public int timesAttackStat;
+	public int timesLostStat;
+	public Date deathTimeStat;
+	public int maxTerritoriesUnderControlStat;	
 	
 	
-	public Territory() {
-		
-	}
+	public Territory() { }
 	
 	public Territory(Map map, int id, String name, Point coordinates, String prefix) {
 		this.map = map;
 		this.id = id;
 		this.name = name;
-		
 		this.coordinates = coordinates;
-		
 		this.prefix = prefix;
-		
-//		this.jsonToWrite = Utils.GAME_DIRECTORY + "/" + this.name + ".json";
 		
 		init();
 	}

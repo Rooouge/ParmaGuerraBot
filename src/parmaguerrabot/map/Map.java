@@ -15,13 +15,12 @@ import parmaguerrabot.GameConstants;
 import parmaguerrabot.Utils;
 import parmaguerrabot.images.ImagesGenerator;
 import parmaguerrabot.log.Logger;
-import parmaguerrabot.serialize.Serializer;
 import parmaguerrabot.serialize.json.JSONObject;
 
 
 @SuppressWarnings("serial")
 public class Map implements Serializable {
-
+	
 	public static final String SERIALIZATION_FILE = Utils.GAME_DIRECTORY.getPath() + "/map.sav";
 	public static final String JSON_FILE = Utils.GAME_DIRECTORY.getPath() + "/map.json";
 	
@@ -29,7 +28,7 @@ public class Map implements Serializable {
 	
 	public Date date;
 	
-	public Territory tWinner;
+	public String winner;
 	public int insurrections;
 	public int dayFromLastInsurrection;
 	
@@ -57,6 +56,14 @@ public class Map implements Serializable {
 		ImagesGenerator.generateMapImage(this, true, territories.size(), 0);
 		
 		checkColors();
+	}
+	
+	public void setTerritoryList() {
+		territories = new ArrayList<>();
+		
+		for(int i = 0; i < GameConstants.NUMBER_OF_TERRITORIES; i++) {
+			territories.add(new Territory());
+		}
 	}
 	
 	public void addTerritories() {
@@ -225,9 +232,7 @@ public class Map implements Serializable {
 		
 		//End game condition
 		if(alive.size() == 1) {
-			tWinner = territories.get(alive.get(0));
-			
-			Serializer.serializeMap(this, Map.SERIALIZATION_FILE);
+			winner = territories.get(alive.get(0)).name;
 			
 			return true;
 		}
@@ -338,7 +343,7 @@ public class Map implements Serializable {
 			
 			if(!Modifier.isStatic(modifiers) && !f.getType().isAssignableFrom(List.class)) {
 				if(f.getType().isAssignableFrom(Territory.class) && f.get(this) != null) 
-					json.put(f.getName(), ((Territory) f.get(this)).getJSONObject());
+					json.put(f.getName(), ((Territory) f.get(this)).name);
 				else {
 					if(f.getType().isAssignableFrom(Date.class)) {
 						String date = Utils.DATE_FORMAT.format((Date) f.get(this));
